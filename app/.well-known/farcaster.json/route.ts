@@ -3,6 +3,12 @@
 // In Next.js, process.env is automatically included
 // No need for explicit import
 export async function GET() {
+  // Set default URL for local development if NEXT_PUBLIC_URL is not defined
+  const URL = process.env.NEXT_PUBLIC_URL || "https://justcoinit.vercel.app";
+  
+  // Use the specific Neynar webhook URL provided in your Neynar dashboard
+  const webhookUrl = "https://api.neynar.com/f/app/16e285ae-0ada-4f7b-b1f7-2742d15cdde8/event";
+
   return Response.json({
     "accountAssociation": {
       "header": "eyJmaWQiOjkxNTIsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgwMmVmNzkwRGQ3OTkzQTM1ZkQ4NDdDMDUzRURkQUU5NDBEMDU1NTk2In0",
@@ -23,6 +29,9 @@ export async function GET() {
         "https://justcoinit.vercel.app/screenshot1.png",
         "https://justcoinit.vercel.app/screenshot2.png",
         "https://justcoinit.vercel.app/screenshot3.png"
+
+
+
       ],
       "primaryCategory": "finance",
       "tags": [
