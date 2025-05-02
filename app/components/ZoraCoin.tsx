@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useAccount, usePublicClient, useWalletClient } from "wagmi";
 import { Button } from "./DemoComponents";
 import { type Address } from "viem";
-import { base } from "wagmi/chains";
 import { createPostCoin, createPostMetadata } from "@/app/utils/zoraSdk";
+import Image from "next/image";
 
 // Opcjonalnie ustaw klucz API, jeśli go masz
 // setApiKey(process.env.NEXT_PUBLIC_ZORA_API_KEY || "");
@@ -26,7 +26,6 @@ export function ZoraCoin({ onSuccess, onError, selectedImage }: ZoraCoinProps) {
   const [isCreating, setIsCreating] = useState(false);
   const [coinName, setCoinName] = useState("");
   const [coinSymbol, setCoinSymbol] = useState("");
-  const [metadataUrl, setMetadataUrl] = useState<string | null>(null);
   const [isPreparingMetadata, setIsPreparingMetadata] = useState(false);
   
   const { data: walletClient } = useWalletClient();
@@ -134,11 +133,15 @@ export function ZoraCoin({ onSuccess, onError, selectedImage }: ZoraCoinProps) {
       
       {selectedImage && (
         <div className="rounded-lg overflow-hidden mb-4 border">
-          <img 
-            src={selectedImage.url} 
-            alt={selectedImage.caption}
-            className="w-full h-64 object-cover" 
-          />
+          <div className="relative w-full h-64">
+            <Image 
+              src={selectedImage.url} 
+              alt={selectedImage.caption}
+              className="object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </div>
           <div className="p-3 bg-gray-50">
             <p className="text-sm">{selectedImage.caption}</p>
           </div>

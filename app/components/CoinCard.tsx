@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "./DemoComponents";
+import Image from "next/image";
 
 interface CoinCardProps {
   address: string;
@@ -29,10 +30,12 @@ export function CoinCard({ address, name, symbol, imageUrl, showBuyButton = fals
             </div>
           ) : (
             <div className="h-full w-full relative">
-              <img 
+              <Image 
                 src={imageUrl}
                 alt={name}
-                className="w-full h-full object-cover"
+                className="object-cover"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
           )}

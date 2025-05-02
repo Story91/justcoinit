@@ -10,6 +10,7 @@ import Image from "next/image";
 interface Image {
   id: string;
   url: string;
+  name: string;
   caption: string;
   author: string;
   timestamp: number;
@@ -29,7 +30,7 @@ interface ImageGalleryProps {
 }
 
 export function ImageGallery({ onAddNewClick }: ImageGalleryProps) {
-  const { address } = useAccount();
+  const { address: _address } = useAccount();
   const [images, setImages] = useState<Image[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -258,12 +259,15 @@ export function ImageGallery({ onAddNewClick }: ImageGalleryProps) {
                 </span>
               </div>
               
-              {/* Use div with img instead of next/image to avoid domain issues */}
+              {/* Use Next/Image instead of img tag */}
               <div className="w-full aspect-square bg-gray-200 relative">
-                <img 
+                <Image 
                   src={image.url} 
                   alt={image.caption || 'Uploaded image'}
-                  className="w-full h-full object-cover"
+                  className="object-cover"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority={false}
                 />
               </div>
               
@@ -285,6 +289,10 @@ export function ImageGallery({ onAddNewClick }: ImageGalleryProps) {
                     </span>
                   )}
                 </div>
+                
+                <p className="font-semibold text-lg mb-2">
+                  {image.name || 'Untitled Photo'}
+                </p>
                 
                 <p className="text-sm mb-4">
                   <strong>{image.author}:</strong> {image.caption}

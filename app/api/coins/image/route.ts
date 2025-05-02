@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Address } from 'viem';
 
 // This is a mock implementation - in a real application, you would use a database to store 
 // the relationship between images and their associated coins

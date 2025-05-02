@@ -110,7 +110,7 @@ export function TokenGallery() {
   if (tokens.length === 0) {
     return (
       <div className="w-full text-center py-12 bg-gray-100 rounded-lg">
-        <p className="text-gray-500 mb-4">You haven't created any tokens yet</p>
+        <p className="text-gray-500 mb-4">You haven&apos;t created any tokens yet</p>
         <Button onClick={() => window.location.href = '/?tab=coin'}>Create your first token</Button>
       </div>
     );

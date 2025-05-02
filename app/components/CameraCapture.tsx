@@ -72,7 +72,7 @@ export function CameraCapture({ onCapture }: CameraCaptureProps) {
     return () => {
       stopCamera();
     };
-  }, []);
+  }, [stopCamera]);
 
   return (
     <div className="flex flex-col items-center w-full space-y-4">

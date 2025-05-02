@@ -1,5 +1,5 @@
 import { createCoin, getCoin, getCoinCreateFromLogs } from '@zoralabs/coins-sdk';
-import { Address, createPublicClient, createWalletClient, http } from 'viem';
+import { Address, createPublicClient, http } from 'viem';
 import { base } from 'viem/chains';
 
 // Prosty mechanizm cachowania

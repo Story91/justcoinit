@@ -1,6 +1,16 @@
 import { NextResponse } from 'next/server';
 import { list } from '@vercel/blob';
 
+interface Image {
+  id: string;
+  url: string;
+  name: string;
+  caption: string;
+  author: string;
+  timestamp: number;
+  likes: number;
+}
+
 export async function GET() {
   try {
     // Get images from both new and old folders
@@ -39,7 +49,10 @@ export async function GET() {
           ? parseInt(timestampMatch[1], 10) 
           : new Date(blob.uploadedAt).getTime();
         
-        // Extract caption from the filename path since Vercel Blob doesn't support custom metadata
+        // Extract image name from the pathname
+        const name = extractImageNameFromPath(blob.pathname);
+        
+        // For backward compatibility, extract caption as well
         const caption = extractCaptionFromPath(blob.pathname);
         
         // Generate a unique ID based on pathname
@@ -48,6 +61,7 @@ export async function GET() {
         return {
           id,
           url: blob.url,
+          name,
           caption,
           author: 'You',
           timestamp,
@@ -70,7 +84,27 @@ export async function GET() {
   }
 }
 
-// Helper to extract caption from filename
+// Helper to extract image name from pathname
+function extractImageNameFromPath(path: string): string {
+  try {
+    // For new format: uploads/images/1234567890-image-name.jpg
+    if (path.includes('/images/')) {
+      // Remove the 'uploads/images/' prefix and the timestamp
+      const withoutPrefixAndTimestamp = path.replace(/^uploads\/images\/\d+-/, '');
+      // Remove file extension
+      return beautifyText(withoutPrefixAndTimestamp.replace(/\.\w+$/, ''));
+    } 
+    // For older format: try to get something reasonable
+    else {
+      return extractCaptionFromPath(path);
+    }
+  } catch (error) {
+    console.error('Error extracting image name:', error);
+    return 'Unnamed Photo';
+  }
+}
+
+// Helper to extract caption from filename (for backward compatibility)
 function extractCaptionFromPath(path: string): string {
   try {
     // Handle different path formats

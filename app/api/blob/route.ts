@@ -15,6 +15,7 @@ export async function POST(request: NextRequest) {
 
     // Extract components for better file naming
     let filename = formData.get('filename') as string || file.name;
+    const imageName = formData.get('imageName') as string || '';
     const caption = formData.get('caption') as string || '';
     const contentType = file.type || 'application/octet-stream';
     
@@ -27,11 +28,10 @@ export async function POST(request: NextRequest) {
     // Create a clean name for storage
     const cleanName = sanitizeFileName(filename);
     
-    // Create storage path with timestamp to prevent collisions
+    // Create storage path with timestamp to prevent collisions and better organization
     const timestamp = Date.now();
-    // Include caption in filename if it exists
-    const captionPart = caption ? `-${sanitizeFileName(caption)}` : '';
-    const storageKey = `uploads/images/${timestamp}${captionPart}-${cleanName}`;
+    // Use the image name as the main part of the filename
+    const storageKey = `uploads/images/${timestamp}-${sanitizeFileName(imageName || 'unnamed')}${fileExtension}`;
     
     // Convert file to blob
     const buffer = await file.arrayBuffer();
@@ -39,7 +39,6 @@ export async function POST(request: NextRequest) {
     
     // Upload to Vercel Blob 
     // Note: Vercel Blob Storage doesn't support custom metadata
-    // so we'll encode caption in the filename
     const { url } = await put(storageKey, blob, {
       access: 'public',
       contentType
@@ -49,6 +48,7 @@ export async function POST(request: NextRequest) {
       success: true, 
       url,
       filename: cleanName,
+      imageName: imageName || undefined,
       contentType,
       caption: caption || undefined
     });

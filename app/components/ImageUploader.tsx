@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import { Button } from "./DemoComponents";
 import { CameraCapture } from "./CameraCapture";
+import Image from "next/image";
 
 interface ImageUploaderProps {
   onImageCaptured: (imageUrl: string, caption: string) => void;
@@ -13,6 +14,7 @@ export function ImageUploader({ onImageCaptured, onCancel }: ImageUploaderProps)
   const [step, setStep] = useState<"initial" | "camera" | "file" | "caption">("initial");
   const [imageData, setImageData] = useState<string | null>(null);
   const [caption, setCaption] = useState("");
+  const [imageName, setImageName] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [fileName, setFileName] = useState("");
@@ -24,15 +26,13 @@ export function ImageUploader({ onImageCaptured, onCancel }: ImageUploaderProps)
     setUploadError(null);
   };
 
-  const handleFileSelect = () => {
-    setStep("file");
-    setUploadError(null);
-  };
-
   const handleImageCapture = (capturedImageData: string) => {
     setImageData(capturedImageData);
     setStep("caption");
     setUploadError(null);
+    
+    // Set default image name
+    setImageName(`Zdjęcie z ${new Date().toLocaleDateString()}`);
     
     // Generate a default file name for camera captures
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
@@ -45,6 +45,10 @@ export function ImageUploader({ onImageCaptured, onCancel }: ImageUploaderProps)
 
     setFileName(file.name);
     setUploadError(null);
+    
+    // Extract file name without extension as default image name
+    const nameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
+    setImageName(nameWithoutExt);
     
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -81,8 +85,8 @@ export function ImageUploader({ onImageCaptured, onCancel }: ImageUploaderProps)
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!imageData || !caption.trim()) {
-      setUploadError('Both image and caption are required');
+    if (!imageData || !caption.trim() || !imageName.trim()) {
+      setUploadError('Nazwa zdjęcia, opis i obraz są wymagane');
       return;
     }
     
@@ -91,8 +95,8 @@ export function ImageUploader({ onImageCaptured, onCancel }: ImageUploaderProps)
       setIsUploading(true);
       setUploadProgress(10);
       
-      // Generate a clean filename from the caption
-      const safeFileName = caption.trim()
+      // Generate a clean filename from the image name
+      const safeFileName = imageName.trim()
         .replace(/\s+/g, '-')
         .replace(/[^\w\-]/g, '')
         .toLowerCase();
@@ -107,12 +111,13 @@ export function ImageUploader({ onImageCaptured, onCancel }: ImageUploaderProps)
         
         // Determine file extension from mime type
         const extension = imageType.split('/')[1] || 'jpg';
-        const finalFileName = `${truncatedName}-${Date.now()}.${extension}`;
+        const finalFileName = `${truncatedName}.${extension}`;
         
         // Create form data
         const formData = new FormData();
         formData.append('file', imageBlob, finalFileName);
         formData.append('filename', finalFileName);
+        formData.append('imageName', imageName);
         formData.append('caption', caption);
         
         setUploadProgress(30);
@@ -157,7 +162,7 @@ export function ImageUploader({ onImageCaptured, onCancel }: ImageUploaderProps)
     // np. przy użyciu funkcji framecaster.addIntent('share')
     console.log("Share intent prepared with image:", imageData);
     
-    const message = `Check out my new photo in JustCoinIt! "${caption}"`;
+    const message = `Check out my new photo in JustCoinIt! "${imageName}" - ${caption}`;
     
     // W Farcaster miniapp moglibyśmy użyć API Intents
     // Symulacja wywołania Farcaster intent
@@ -207,23 +212,41 @@ export function ImageUploader({ onImageCaptured, onCancel }: ImageUploaderProps)
 
       {step === "caption" && imageData && (
         <form onSubmit={handleFormSubmit} className="space-y-4">
-          <h3 className="text-lg font-medium mb-2">Dodaj opis</h3>
+          <h3 className="text-lg font-medium mb-2">Informacje o zdjęciu</h3>
           
-          <div className="w-full h-64 bg-gray-200 mb-3 rounded overflow-hidden">
-            <img 
+          <div className="w-full h-64 bg-gray-200 mb-3 rounded overflow-hidden relative">
+            <Image 
               src={imageData} 
               alt="Captured" 
-              className="w-full h-full object-contain"
+              className="object-contain"
+              fill
+              unoptimized // Dla base64 images potrzebujemy unoptimized
+              priority={true}
+            />
+          </div>
+          
+          <div>
+            <label htmlFor="imageName" className="block text-sm font-medium mb-1">
+              Nazwa zdjęcia
+            </label>
+            <input
+              id="imageName"
+              type="text"
+              placeholder="Wpisz nazwę zdjęcia..."
+              value={imageName}
+              onChange={(e) => setImageName(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md"
+              required
             />
           </div>
           
           <div>
             <label htmlFor="caption" className="block text-sm font-medium mb-1">
-              Opis
+              Opis zdjęcia
             </label>
             <textarea
               id="caption"
-              placeholder="Napisz coś o tym zdjęciu..."
+              placeholder="Napisz coś więcej o tym zdjęciu..."
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md"
@@ -253,7 +276,7 @@ export function ImageUploader({ onImageCaptured, onCancel }: ImageUploaderProps)
           <div className="flex space-x-2">
             <Button
               type="submit"
-              disabled={!caption.trim() || isUploading}
+              disabled={!imageName.trim() || !caption.trim() || isUploading}
               className="flex-1"
             >
               {isUploading ? 'Publikowanie...' : 'Opublikuj'}
@@ -261,7 +284,7 @@ export function ImageUploader({ onImageCaptured, onCancel }: ImageUploaderProps)
             <Button
               type="button"
               onClick={prepareShareIntent}
-              disabled={!caption.trim() || isUploading}
+              disabled={!imageName.trim() || !caption.trim() || isUploading}
               variant="secondary"
               className="flex-1"
             >
