@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getCachedCoin } from '@/app/utils/zoraSdk';
 import { Address } from 'viem';
 
+// Zapobiega statycznemu generowaniu tego endpointu API
+export const dynamic = 'force-dynamic';
+
 // In a production app, use a database or indexer to track created coins
 // For now, we'll use localStorage in the client and this API will 
 // just fetch details for a given address
