@@ -14,4 +14,29 @@ declare namespace NodeJS {
     FARCASTER_PAYLOAD?: string;
     FARCASTER_SIGNATURE?: string;
   }
-} 
+}
+
+// Global declarations for TypeScript
+
+declare module '@farcaster/frame-sdk' {
+  export const sdk: {
+    context: Promise<{
+      client: {
+        clientFid?: string;
+        [key: string]: any;
+      };
+      [key: string]: any;
+    }>;
+    actions: {
+      ready: () => void;
+      [key: string]: any;
+    };
+    [key: string]: any;
+  };
+}
+
+declare module '@farcaster/frame-wagmi-connector' {
+  export function farcasterFrame(): any;
+}
+
+export {}; 

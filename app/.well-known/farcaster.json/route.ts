@@ -3,47 +3,39 @@
 // In Next.js, process.env is automatically included
 // No need for explicit import
 export async function GET() {
-  // Set default URL for local development if NEXT_PUBLIC_URL is not defined
-  const URL = process.env.NEXT_PUBLIC_URL || "https://justcoinit.vercel.app";
-  
-  // Use the specific Neynar webhook URL provided in your Neynar dashboard
-  const webhookUrl = "https://api.neynar.com/f/app/16e285ae-0ada-4f7b-b1f7-2742d15cdde8/event";
-
   return Response.json({
-    accountAssociation: {
-      header: process.env.FARCASTER_HEADER,
-      payload: process.env.FARCASTER_PAYLOAD,
-      signature: process.env.FARCASTER_SIGNATURE,
+    "accountAssociation": {
+      "header": "eyJmaWQiOjkxNTIsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgwMmVmNzkwRGQ3OTkzQTM1ZkQ4NDdDMDUzRURkQUU5NDBEMDU1NTk2In0",
+      "payload": "eyJkb21haW4iOiJqdXN0Y29pbml0LnZlcmNlbC5hcHAifQ==",
+      "signature": "MHgxMGQwZGU4ZGYwZDUwZTdmMGIxN2YxMTU2NDI1MjRmZTY0MTUyZGU4ZGU1MWU0MThiYjU4ZjVmZmQxYjRjNDBiNGVlZTRhNDcwNmVmNjhlMzQ0ZGQ5MDBkYmQyMmNlMmVlZGY5ZGQ0N2JlNWRmNzMwYzUxNjE4OWVjZDJjY2Y0MDFj"
     },
-    frame: {
-      version: process.env.NEXT_PUBLIC_VERSION || "next",
-      name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "JustCoinIt",
-      homeUrl: URL,
-      iconUrl: process.env.NEXT_PUBLIC_ICON_URL || `${URL}/icon.png`,
-      imageUrl: process.env.NEXT_PUBLIC_IMAGE_URL || `${URL}/image.png`,
-      buttonTitle: `Launch ${process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "JustCoinIt"}`,
-      splashImageUrl: process.env.NEXT_PUBLIC_SPLASH_IMAGE_URL || `${URL}/splash.png`,
-      splashBackgroundColor: `#${process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR || "000000"}`,
-      webhookUrl: webhookUrl,
-      // Dodatkowe pola zgodne z nową specyfikacją
-      subtitle: "JustCoinIt subtitle",
-      description: "JustCoinIt - Twoja aplikacja do zarządzania kryptowalutami",
-      screenshotUrls: [
-        `${URL}/screenshot1.png`,
-        `${URL}/screenshot2.png`,
-        `${URL}/screenshot3.png`
+    "frame": {
+      "version": "1",
+      "name": "JustCoinIt",
+      "iconUrl": "https://justcoinit.vercel.app/app.png",
+      "splashImageUrl": "https://justcoinit.vercel.app/logo.png",
+      "splashBackgroundColor": "#000000",
+      "homeUrl": "https://justcoinit.vercel.app",
+      "webhookUrl": "https://api.neynar.com/f/app/16e285ae-0ada-4f7b-b1f7-2742d15cdde8/event",
+      "subtitle": "JustCoinIt - Base Builder Quest 4",
+      "description": "Aplikacja do zarządzania kryptowalutami w ekosystemie Base.",
+      "screenshotUrls": [
+        "https://justcoinit.vercel.app/screenshot1.png",
+        "https://justcoinit.vercel.app/screenshot2.png",
+        "https://justcoinit.vercel.app/screenshot3.png"
       ],
-      primaryCategory: "finance",
-      tags: [
+      "primaryCategory": "finance",
+      "tags": [
         "crypto",
         "miniapp",
-        "coinbasewallet"
+        "coinbasewallet",
+        "base"
       ],
-      heroImageUrl: process.env.NEXT_PUBLIC_IMAGE_URL || `${URL}/image.png`,
-      tagline: "Zarządzaj kryptowalutami łatwo",
-      ogTitle: "JustCoinIt",
-      ogDescription: "Prosta aplikacja do zarządzania kryptowalutami",
-      ogImageUrl: process.env.NEXT_PUBLIC_IMAGE_URL || `${URL}/image.png`
-    },
+      "heroImageUrl": "https://justcoinit.vercel.app/og.png",
+      "tagline": "Zarządzaj kryptowalutami łatwo",
+      "ogTitle": "JustCoinIt",
+      "ogDescription": "Aplikacja do zarządzania kryptowalutami w ekosystemie Base",
+      "ogImageUrl": "https://justcoinit.vercel.app/og.png"
+    }
   });
 }
