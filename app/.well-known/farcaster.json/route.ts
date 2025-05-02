@@ -4,6 +4,8 @@
 // No need for explicit import
 export async function GET() {
   const URL = process.env.NEXT_PUBLIC_URL;
+  // Use the Neynar webhook URL if available, otherwise fall back to the default
+  const webhookUrl = process.env.NEYNAR_WEBHOOK_URL || `${URL}/api/webhook`;
 
   return Response.json({
     accountAssociation: {
@@ -20,7 +22,7 @@ export async function GET() {
       buttonTitle: `Launch ${process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "JustCoinIt"}`,
       splashImageUrl: process.env.NEXT_PUBLIC_SPLASH_IMAGE_URL,
       splashBackgroundColor: `#${process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR || "000000"}`,
-      webhookUrl: `${URL}/api/webhook`,
+      webhookUrl: webhookUrl,
       // Dodatkowe pola zgodne z nową specyfikacją
       subtitle: "JustCoinIt subtitle",
       description: "JustCoinIt - Twoja aplikacja do zarządzania kryptowalutami",
