@@ -24,11 +24,11 @@ export default function FarcasterPage() {
         <div className="p-4 border rounded-lg">
           <h2 className="text-xl font-semibold mb-2">Getting Started</h2>
           <p className="mb-4">
-            To connect your Farcaster account, you'll need to:
+            To connect your Farcaster account, you&apos;ll need to:
           </p>
           <ol className="list-decimal pl-5 space-y-2">
             <li>Install the Warpcast app or visit warpcast.com</li>
-            <li>Create a Farcaster account if you don't have one</li>
+            <li>Create a Farcaster account if you don&apos;t have one</li>
             <li>Look for JustCoinIt in the Frames/Mini Apps section</li>
             <li>Authorize the connection to access JustCoinIt</li>
           </ol>

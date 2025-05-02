@@ -2,6 +2,16 @@
 
 import { useState } from 'react';
 
+interface ErrorResponse {
+  error: string;
+}
+
+interface SuccessResponse {
+  message: string;
+}
+
+type ApiResponse = SuccessResponse | ErrorResponse;
+
 export default function GroqAIChat() {
   const [prompt, setPrompt] = useState('');
   const [response, setResponse] = useState('');
@@ -22,15 +32,18 @@ export default function GroqAIChat() {
         body: JSON.stringify({ prompt }),
       });
       
-      const data = await res.json();
+      const data = await res.json() as ApiResponse;
       
       if (!res.ok) {
-        throw new Error(data.error || 'Something went wrong');
+        throw new Error('error' in data ? data.error : 'Something went wrong');
       }
       
-      setResponse(data.message);
-    } catch (err: any) {
-      setError(err.message || 'Failed to get response');
+      if ('message' in data) {
+        setResponse(data.message);
+      }
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to get response';
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

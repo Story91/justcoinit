@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import neynarClient from '@/lib/neynar-client';
 
 export async function POST(request: NextRequest) {
   // Get the API key from headers to validate the request

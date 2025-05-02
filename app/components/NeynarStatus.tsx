@@ -2,21 +2,28 @@
 
 import { useState, useEffect } from 'react';
 
+interface ApiStatusResponse {
+  status: 'success' | 'error';
+  message: string;
+  details?: Record<string, unknown>;
+  error?: string;
+}
+
 export default function NeynarStatus() {
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [message, setMessage] = useState('');
-  const [details, setDetails] = useState<any>(null);
+  const [details, setDetails] = useState<Record<string, unknown> | null>(null);
 
   useEffect(() => {
     async function checkNeynarStatus() {
       try {
         const response = await fetch('/api/farcaster/status');
-        const data = await response.json();
+        const data = await response.json() as ApiStatusResponse;
         
         if (data.status === 'success') {
           setStatus('success');
           setMessage(data.message);
-          setDetails(data.details);
+          setDetails(data.details || null);
         } else {
           setStatus('error');
           setMessage(data.message || 'Failed to connect to Neynar API');
