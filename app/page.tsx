@@ -19,7 +19,7 @@ import {
   WalletDropdownDisconnect,
 } from "@coinbase/onchainkit/wallet";
 import { useAccount } from "wagmi";
-import { useEffect, useMemo, useState, useCallback, Suspense } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { Button } from "./components/DemoComponents";
 import { Icon } from "./components/DemoComponents";
 import { ImageGallery } from "./components/ImageGallery";
@@ -33,8 +33,7 @@ interface SelectedImage {
   caption: string;
 }
 
-// Komponent opakowujący dla części używającej useSearchParams
-function AppContent() {
+export default function App() {
   const { setFrameReady, isFrameReady, context } = useMiniKit();
   const [frameAdded, setFrameAdded] = useState(false);
   const [activeTab, setActiveTab] = useState("gallery");
@@ -250,19 +249,19 @@ function AppContent() {
                   zintegrować ją z publikowanymi treściami.
                 </p>
                 <Button onClick={() => handleSwitchTab('tokens')}>
-                  Zobacz swoje tokeny
+                  View My Tokens
                 </Button>
               </div>
             ) : (
               <ZoraCoin 
-                onSuccess={handleCoinCreated}
+                onSuccess={handleCoinCreated} 
                 onError={handleCoinError}
                 selectedImage={selectedImage}
               />
             )
-          ) : (
+          ) : activeTab === 'tokens' ? (
             <TokenGallery />
-          )}
+          ) : null}
         </main>
 
         <footer className="mt-2 pt-4 flex justify-center">
@@ -277,14 +276,5 @@ function AppContent() {
         </footer>
       </div>
     </div>
-  );
-}
-
-// Główny komponent opakowany w Suspense
-export default function App() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <AppContent />
-    </Suspense>
   );
 }
