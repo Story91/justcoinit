@@ -3,9 +3,11 @@
 // In Next.js, process.env is automatically included
 // No need for explicit import
 export async function GET() {
-  const URL = process.env.NEXT_PUBLIC_URL;
-  // Use the Neynar webhook URL if available, otherwise fall back to the default
-  const webhookUrl = process.env.NEYNAR_WEBHOOK_URL || `${URL}/api/webhook`;
+  // Set default URL for local development if NEXT_PUBLIC_URL is not defined
+  const URL = process.env.NEXT_PUBLIC_URL || "https://justcoinit.vercel.app";
+  
+  // Use the specific Neynar webhook URL provided in your Neynar dashboard
+  const webhookUrl = "https://api.neynar.com/f/app/16e285ae-0ada-4f7b-b1f7-2742d15cdde8/event";
 
   return Response.json({
     accountAssociation: {
@@ -17,10 +19,10 @@ export async function GET() {
       version: process.env.NEXT_PUBLIC_VERSION || "next",
       name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "JustCoinIt",
       homeUrl: URL,
-      iconUrl: process.env.NEXT_PUBLIC_ICON_URL,
-      imageUrl: process.env.NEXT_PUBLIC_IMAGE_URL,
+      iconUrl: process.env.NEXT_PUBLIC_ICON_URL || `${URL}/icon.png`,
+      imageUrl: process.env.NEXT_PUBLIC_IMAGE_URL || `${URL}/image.png`,
       buttonTitle: `Launch ${process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "JustCoinIt"}`,
-      splashImageUrl: process.env.NEXT_PUBLIC_SPLASH_IMAGE_URL,
+      splashImageUrl: process.env.NEXT_PUBLIC_SPLASH_IMAGE_URL || `${URL}/splash.png`,
       splashBackgroundColor: `#${process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR || "000000"}`,
       webhookUrl: webhookUrl,
       // Dodatkowe pola zgodne z nową specyfikacją
@@ -37,11 +39,11 @@ export async function GET() {
         "miniapp",
         "coinbasewallet"
       ],
-      heroImageUrl: process.env.NEXT_PUBLIC_IMAGE_URL,
+      heroImageUrl: process.env.NEXT_PUBLIC_IMAGE_URL || `${URL}/image.png`,
       tagline: "Zarządzaj kryptowalutami łatwo",
       ogTitle: "JustCoinIt",
       ogDescription: "Prosta aplikacja do zarządzania kryptowalutami",
-      ogImageUrl: process.env.NEXT_PUBLIC_IMAGE_URL
+      ogImageUrl: process.env.NEXT_PUBLIC_IMAGE_URL || `${URL}/image.png`
     },
   });
 }
