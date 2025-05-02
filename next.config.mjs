@@ -6,6 +6,16 @@ const nextConfig = {
     config.externals.push("pino-pretty", "lokijs", "encoding");
     return config;
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.vercel-storage.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

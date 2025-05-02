@@ -23,7 +23,7 @@ export async function GET() {
       "splashBackgroundColor": "#000000",
       "homeUrl": "https://justcoinit.vercel.app",
       "webhookUrl": "https://api.neynar.com/f/app/16e285ae-0ada-4f7b-b1f7-2742d15cdde8/event",
-      "subtitle": "JustCoinIt - Base Builder Quest 4",
+      "subtitle": "JustCoinIt",
       "description": "Aplikacja do zarządzania kryptowalutami w ekosystemie Base.",
       "screenshotUrls": [
         "https://justcoinit.vercel.app/screenshot1.png",
